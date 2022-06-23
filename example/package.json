@@ -1,0 +1,25 @@
+{
+  "name": "json-graphql-server-example",
+  "version": "0.0.1",
+  "description": "A simple API interface for querying graphql server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "SET NODE_ENV=development && node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.cm/koustov/json-graphql-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/koustov/json-graphql-server/issues"
+  },
+  "type": "module",
+  "homepage": "https://github.com/koustov/json-graphql-serveri#readme",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "dotenv": "^16.0.1"
+  }
+}
