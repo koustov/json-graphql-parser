@@ -1,6 +1,6 @@
 <div align="center">
    <p>
-    <h1>json-graphql-server</h1>
+    <h1>json-graphql-parser</h1>
     <h4>A simple way to create and parse graphql query on node application</h1>
   </p>
   <p>
@@ -17,7 +17,7 @@
 
 ---
 
-![GitHub watchers](https://img.shields.io/github/watchers/koustov/json-graphql-server.svg?logo=github&label=Watch) ![GitHub watchers](https://img.shields.io/github/issues/koustov/json-graphql-server?logo=github&label=Issues) ![GitHub watchers](https://img.shields.io/github/stars/koustov/json-graphql-server?logo=github&label=Stars) ![GitHub watchers](https://img.shields.io/npm/dt/rfp-react-form-builder.svg?logo=npm&label=downloads)
+![GitHub watchers](https://img.shields.io/github/watchers/koustov/json-graphql-parser.svg?logo=github&label=Watch) ![GitHub watchers](https://img.shields.io/github/issues/koustov/json-graphql-parser?logo=github&label=Issues) ![GitHub watchers](https://img.shields.io/github/stars/koustov/json-graphql-parser?logo=github&label=Stars) ![GitHub watchers](https://img.shields.io/npm/dt/rfp-react-form-builder.svg?logo=npm&label=downloads)
 
 This is a **fully customizable** form builder based on [`React`](https://facebook.github.io/react/)
 
@@ -34,24 +34,24 @@ This is a **fully customizable** form builder based on [`React`](https://faceboo
 ## Install 
 
 ```bash
-    npm install json-graphql-server axios
+    npm install json-graphql-parser axios
 ```
 
 or
 
 ```bash
-    yarn add json-graphql-server axios
+    yarn add json-graphql-parser axios
 ```
 ## Usage
 
 1. Import
     ES6
     ```javascript
-    import {submit} from 'json-graphql-server'
+    import {submit} from 'json-graphql-parser'
     ```
     ES5
     ```javascript
-    const {submit} = require('json-graphql-server')
+    const {submit} = require('json-graphql-parser')
     ```
 1. Usage
    ```javascript
