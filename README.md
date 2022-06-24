@@ -17,7 +17,7 @@
 
 ---
 
-![GitHub watchers](https://img.shields.io/github/watchers/koustov/json-graphql-parser.svg?logo=github&label=Watch) ![GitHub watchers](https://img.shields.io/github/issues/koustov/json-graphql-parser?logo=github&label=Issues) ![GitHub watchers](https://img.shields.io/github/stars/koustov/json-graphql-parser?logo=github&label=Stars) ![GitHub watchers](https://img.shields.io/npm/dt/rfp-react-form-builder.svg?logo=npm&label=downloads)
+![GitHub watchers](https://img.shields.io/github/watchers/koustov/json-graphql-parser.svg?logo=github&label=Watch) ![GitHub watchers](https://img.shields.io/github/issues/koustov/json-graphql-parser?logo=github&label=Issues) ![GitHub watchers](https://img.shields.io/github/stars/koustov/json-graphql-parser?logo=github&label=Stars) ![GitHub watchers](https://img.shields.io/npm/dt/json-graphql-parser.svg?logo=npm&label=downloads)
 
 This is a **fully customizable** form builder based on [`React`](https://facebook.github.io/react/)
 
@@ -35,11 +35,7 @@ This is a **fully customizable** form builder based on [`React`](https://faceboo
 
 ```bash
     npm install json-graphql-parser axios
-```
-
-or
-
-```bash
+    # or
     yarn add json-graphql-parser axios
 ```
 ## Usage
@@ -47,13 +43,13 @@ or
 1. Import
     ES6
     ```javascript
+    // ES6
     import {submit} from 'json-graphql-parser'
-    ```
-    ES5
-    ```javascript
+    
+    // ES5
     const {submit} = require('json-graphql-parser')
     ```
-1. Usage
+2. Usage
    ```javascript
    submit(query_config, url, additional_header)
    ```
@@ -67,8 +63,8 @@ Basic Query
     display:    "[Optional | String]: Give a display name for the query",
     name:       "[Optional | String]: Query name",
     function:   "[Required | String]: Target function name",
-    write:      "[Optional | Boolean]: Whether the current one is a write query,
-    params:     "[Required | String Array]: Array parameters to return
+    write:      "[Optional | Boolean]: Whether the current one is a write query",
+    params:     "[Required | String Array]: Array parameters to return"
 }
 ```
 
@@ -78,13 +74,15 @@ Clause
 {
     where: {
         class:      "[Optional | String] Target class name",
-        node:       "[Required | String] Target attribute",
+        node:       "[Required | String] Target node",
         operator:   "[Optional | String] Operator type (or/and)",
         clause: [{
             field:      "[Required | String]: Field in question",
             operator:   "[Required | String] Operator (eq | ne | in | ...)",
             value:      "[Required | String] Value to match",
             type:       "[Optional | String] Value type",
+            class:      "[Optional | String] Target class name",
+            node:       "[Required | String] Target node",
         }],
     },
 }

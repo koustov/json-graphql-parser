@@ -4,40 +4,6 @@ dotenv.config({ path: ".env" });
 
 const url = process.env.API_SERVER;
 const config = {
-  // query Fetch_Plays {
-  //   plays(where: {play_tags:{tag: {id: {_eq: "1b4439df-ff51-4ead-87ec-ed8799657ce7"}}}}){
-  //     blog
-  //     component
-  //     cover
-  //     created_at
-  //     description
-  //     featured
-  //     github
-  //     owner_user_id
-  //     id
-  //     language
-  //     level {
-  //       id
-  //       name
-  //     }
-  //     name
-  //     path
-  //     play_tags {
-  //       tag {
-  //         id
-  //         name
-  //       }
-  //     }
-  //     updated_at
-  //     user{
-  //       id
-  //       displayName
-  //       avatarUrl
-
-  //     }
-  //     video
-  //   }
-  // }
   display: "Filter plays by level, user, language, and multiple tags",
   name: "Fetch_Plays",
   function: "plays",
@@ -63,13 +29,32 @@ const config = {
     "video",
   ],
   where: {
-    class: "tag",
-    node: "play_tags",
+    operator: "and",
     clause: [
       {
+        field: "level_id",
+        operator: "eq",
+        value: "4127ed16-bf37-4c34-bed0-282cd646cd53",
+        type: "string",
+      },
+      {
+        field: "owner_user_id",
+        operator: "eq",
+        value: "0680f581-6584-4bc4-bbe9-aa7c97567e72",
+        type: "string",
+      },
+      {
+        field: "language",
+        operator: "eq",
+        value: "js",
+        type: "string",
+      },
+      {
+        node: "play_tags",
+        class: "tag",
         field: "id",
         operator: "eq",
-        value: "3a31d031-f367-4514-ad80-f4e241577118",
+        value: "1b4439df-ff51-4ead-87ec-ed8799657ce7",
         type: "string",
       },
     ],

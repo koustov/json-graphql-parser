@@ -346,6 +346,21 @@ const prepareClause = (config) => {
               )}}}}`
             );
           }
+        }
+        if (c.node || c.class) {
+          if (c.node) {
+            clause = clause.replace(
+              "%CLAUSE_DATA%",
+              `{${c.node}:%CLAUSE_DATA%}`
+            );
+          }
+
+          if (c.class) {
+            clause = clause.replace(
+              "%CLAUSE_DATA%",
+              `{${c.class}:{${c.field}:{_${c.operator}: ${getParamValue(c)}}}}`
+            );
+          }
         } else {
           clause = `${clause} {${c.field}:{_${c.operator}: ${getParamValue(
             c
