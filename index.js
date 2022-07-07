@@ -120,7 +120,7 @@ export const config_to_query = (config) => {
     } else {
       res = `
         mutation {
-      ${config.method}${getParametersFormatted(config.param)}
+      ${config.function}${getParametersFormatted(config.param)}
         ${getBodyFormatted(config.body)}    
         }
     `;
