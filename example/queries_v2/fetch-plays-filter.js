@@ -32,7 +32,6 @@ export const FetchPlaysFilter = {
               field: "featured",
               operator: "eq",
               value: true,
-              type: "boolean",
             },
           ],
         },
@@ -72,17 +71,16 @@ export const FetchPlaysFilter = {
               field: "name",
               operator: "iregex",
               value: Obj.name,
-              type: "string",
             },
             {
               field: "description",
               operator: "iregex",
               value: Obj.name,
-              type: "string",
             },
           ],
         },
       },
+      return: ["id"],
     };
   },
 };

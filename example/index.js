@@ -1,35 +1,108 @@
-import { config_to_query } from "../index_v2.js";
-import { submit } from "../index_v1.js";
+import { submit } from "json-graphql-server/v2/index.js";
 import dotenv from "dotenv";
-import { AddATag } from "./queries/mutations.js";
 import { fetchFilterData } from "./queries_v2/fetch-filter-data.js";
 import { FetchPlaysFilter } from "./queries_v2/fetch-plays-filter.js";
+import { FetchPlaysPaginated } from "./queries_v2/fetch-plays-paginated.js";
+import { FetchPlaysSorted } from "./queries_v2/fetch-plays-sorted.js";
+import { FetchPlaysSimple } from "./queries_v2/fetch-plays.js";
+import { AddATag, AddALike } from "./queries_v2/insert.js";
+import { UpdateATag } from "./queries_v2/update.js";
+import { DeleteATag } from "./queries_v2/delete.js";
 
 dotenv.config({ path: ".env" });
 
 const url = process.env.API_SERVER;
-console.log("fetch-filter-data -------------------");
+// ####################### FETCH QUERIES ##############################
+
 console.log("Query Processing Starts");
-let query = config_to_query(fetchFilterData.getAllTags);
-submit(query, url, undefined, true)
-  .then((res) => console.log(res))
-  .catch((e) => console.error(e));
-console.log("Query Processing Ends");
-console.log(config_to_query(fetchFilterData.getAllLevels));
-console.log(config_to_query(fetchFilterData.getAllUsers));
-console.log("-------------------------------");
+
+submit(fetchFilterData.getAllTags, url, undefined, true)
+  .then((res) =>
+    console.log(`Result (getAllTags): Total rows retrieved ${res.length}`)
+  )
+  .catch((e) => console.error(`ERROR: (getAllTags) ${e}`));
+
+submit(fetchFilterData.getAllLevels, url, undefined, true)
+  .then((res) =>
+    console.log(`Result (getAllLevels): Total rows retrieved ${res.length}`)
+  )
+  .catch((e) => console.error(`ERROR: (getAllLevels) ${e}`));
+
+submit(fetchFilterData.getAllUsers, url, undefined, true)
+  .then((res) =>
+    console.log(`Result (getAllUsers): Total rows retrieved ${res.length}`)
+  )
+  .catch((e) => console.error(`ERROR: (getAllUsers) ${e}`));
 
 console.log("fetch-plays-filter -------------------");
-console.log(config_to_query(FetchPlaysFilter.getAllFeaturedPlays()));
-console.log(
-  config_to_query(FetchPlaysFilter.filterPlaysBySearchString({ name: "why" }))
-);
 
-console.log("-------------------------------");
-// submit(AddATag, url)
-//   .then((res) => {
-//     console.log(JSON.stringify(res, null, 2));
-//   })
-//   .catch((err) => {
-//     console.error(err);
-//   });
+submit(FetchPlaysFilter.getAllFeaturedPlays(), url, undefined, true)
+  .then((res) =>
+    console.log(
+      `Result (getAllFeaturedPlays): Total rows retrieved ${res.length}`
+    )
+  )
+  .catch((e) => console.error(`ERROR: (getAllFeaturedPlays) ${e}`));
+
+submit(
+  FetchPlaysFilter.filterPlaysBySearchString({ name: "why" }),
+  url,
+  undefined,
+  true
+)
+  .then((res) =>
+    console.log(
+      `Result (filterPlaysBySearchString): Total rows retrieved ${res.length}`
+    )
+  )
+  .catch((e) => console.error(`ERROR: (filterPlaysBySearchString) ${e}`));
+
+// console.log("-------------------------------");
+
+submit(FetchPlaysPaginated, url, undefined, true)
+  .then((res) =>
+    console.log(
+      `Result (FetchPlaysPaginated): Total rows retrieved ${res.length}`
+    )
+  )
+  .catch((e) => console.error(`ERROR: (FetchPlaysPaginated) ${e}`));
+
+submit(FetchPlaysSorted, url, undefined, true)
+  .then((res) =>
+    console.log(`Result (FetchPlaysSorted): Total rows retrieved ${res.length}`)
+  )
+  .catch((e) => console.error(`ERROR: (FetchPlaysSorted) ${e}`));
+
+submit(FetchPlaysSimple, url, undefined, true)
+  .then((res) =>
+    console.log(`Result (FetchPlaysSimple): Total rows retrieved ${res.length}`)
+  )
+  .catch((e) => console.error(`ERROR: (FetchPlaysSimple) ${e}`));
+
+// ####################### DELETE QUERIES ##############################
+// submit(DeleteATag, url, undefined, true)
+//   .then((res) =>
+//     console.log(`Result (DeleteATag): Total rows retrieved ${res.length}`)
+//   )
+//   .catch((e) => console.error(`ERROR: (DeleteATag) ${e}`));
+// ####################### INSERT QUERIES ##############################
+
+// submit(AddATag, url, undefined, true)
+//   .then((res) =>
+//     console.log(`Result (AddATag): Total rows retrieved ${res.length}`)
+//   )
+//   .catch((e) => console.error(`ERROR: (FetchPlaysSimple) ${e}`));
+
+// // NOT WORKING
+// submit(AddALike, url, undefined, true)
+//   .then((res) =>
+//     console.log(`Result (AddALike): Total rows retrieved ${res.length}`)
+//   )
+//   .catch((e) => console.error(`ERROR: (AddALike) ${e}`));
+
+// ####################### UPDATE QUERIES ##############################
+// submit(UpdateATag, url, undefined, true)
+//   .then((res) =>
+//     console.log(`Result (UpdateATag): Total rows retrieved ${res.length}`)
+//   )
+//   .catch((e) => console.error(`ERROR: (UpdateATag) ${e}`));

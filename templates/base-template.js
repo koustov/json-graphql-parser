@@ -6,13 +6,24 @@ import {
 
 export const prepareQuery = (config) => {
   const template = getTempate(config);
-  let res;
+  let res = "";
   if (template.arguments.length) {
     const argument_list = [];
     template.arguments.forEach((arg) => {
-      argument_list.push(objectToString(arg));
+      if (typeof arg === "string") {
+        argument_list.push(arg);
+      } else if (Array.isArray(arg)) {
+        argument_list.push(`[${objectsToString(arg)}]`);
+      } else if (arg instanceof Object) {
+        argument_list.push(`${objectToString(arg)}`);
+      }
     });
-    res = `(${argument_list.join(",")})`;
+    res = `(${argument_list
+      .join(",")
+      .replace(/"'/g, "")
+      .replace(/'"/g, "")
+      .replace(/'/g, "")
+      .replace(/\\/g, "")})`;
   }
 
   if (template.params) {
@@ -29,7 +40,7 @@ export const getTempate = (config) => {
 
   // dstinction
   if (config.distinct) {
-    res.arguments.push({ distinct_on: config.distinct });
+    res.arguments.push({ distinct_on: `'${config.distinct}'` });
   }
 
   // limit
@@ -44,12 +55,19 @@ export const getTempate = (config) => {
 
   // order_by
   if (config.orderBy) {
-    res.arguments.push({ order_by: objectToString(config.orderBy) });
+    res.arguments.push({
+      order_by: `'{${objectToString(config.orderBy, true)}}'`,
+    });
   }
 
   // where
   if (config.where) {
     res.arguments.push({ where: prepareClause(config.where) });
+  }
+
+  // objects
+  if (config.object) {
+    res.arguments.push({ object: config.object });
   }
 
   // objects
@@ -59,7 +77,12 @@ export const getTempate = (config) => {
 
   // value
   if (config.value) {
-    res.arguments.push({ _set: objectToString(config.value) });
+    res.arguments.push({ _set: config.value });
+  }
+
+  // custom object
+  if (config.custom) {
+    res.arguments.push(config.value);
   }
 
   // return

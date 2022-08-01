@@ -4,18 +4,26 @@ export const processLabels = (template, config) => {
     .replace("%MUTATION_FUNCTION%", config.function);
 };
 
-export const objectToString = (object_to_process) => {
+export const objectToString = (object_to_process, ignore_quote = false) => {
   const object_parsed = [];
   Object.keys(object_to_process).forEach((key) => {
-    object_parsed.push(
-      `${key}:${
-        object_to_process[key] instanceof Object
-          ? objectToString(object_to_process[key])
-          : object_to_process[key]
-      }`
-    );
+    let val = object_to_process[key];
+    if (Array.isArray(val)) {
+      val = ` [${objectsToString(val)}]`;
+    } else if (val instanceof Object) {
+      val = ` {${objectToString(object_to_process[key])}}`;
+    } else if (typeof val === "string") {
+      val = ` "${val}"`;
+    } else {
+      val = val;
+    }
+    object_parsed.push(`${key}:${val}`);
   });
-  return object_parsed.join(",");
+  if (ignore_quote) {
+    return object_parsed.join(",").replace(/"/g, "");
+  } else {
+    return object_parsed.join(",");
+  }
 };
 
 export const objectToGraphqlString = (object_to_process) => {
@@ -54,9 +62,9 @@ export const objectToGraphqlString = (object_to_process) => {
 export const objectsToString = (objects_to_process) => {
   const objects_parsed = [];
   objects_to_process.forEach((obj) => {
-    objects_parsed.push(`${objectToString(obj)}`);
+    objects_parsed.push(`{${objectToString(obj)}}`);
   });
-  const allObjectJoined = object_parsed.join(",");
+  const allObjectJoined = objects_parsed.join(",");
   return `${allObjectJoined}`;
 };
 
@@ -77,7 +85,8 @@ export const prepareClause = (where_clause) => {
     if (clause) {
       if (clause.operator) {
         const operaton_string = `'_${clause.operator}'`;
-        current_obj[operaton_string] = {};
+        current_obj[operaton_string] =
+          clause.conditions && clause.conditions.length > 1 ? [] : {};
         current_obj = current_obj[operaton_string];
       }
 
@@ -87,21 +96,32 @@ export const prepareClause = (where_clause) => {
       }
 
       if (clause.conditions && clause.conditions.length) {
-        clause.conditions.forEach((con) => {
-          current_obj[`'${con.field}'`] = {
-            [`'_${con.operator}'`]: `'${getParamValue(con)}'`,
-          };
-          if (con.clause) {
-            con = { ...con, ...processClauseObject(con) };
-          }
-        });
+        if (clause.conditions.length > 1) {
+          clause.conditions.forEach((con) => {
+            current_obj.push({
+              [`'${con.field}'`]: {
+                [`'_${con.operator}'`]: `'${getParamValue(con.value)}'`,
+              },
+            });
+            if (con.clause) {
+              con = { ...con, ...processClauseObject(con) };
+            }
+          });
+        } else {
+          clause.conditions.forEach((con) => {
+            current_obj[`'${con.field}'`] = {
+              [`'_${con.operator}'`]: `'${getParamValue(con.value)}'`,
+            };
+            if (con.clause) {
+              con = { ...con, ...processClauseObject(con) };
+            }
+          });
+        }
       }
     }
     return res_obj;
   };
-  return JSON.stringify(processClauseObject(where_clause))
-    .replace(/"'/g, "")
-    .replace(/'"/g, "");
+  return processClauseObject(where_clause);
 };
 
 export const prepareClauseObject = (name, config) => {
@@ -117,7 +137,7 @@ export const prepareClauseObject = (name, config) => {
     res = res.replace(
       "%CLAUSE_OBJECT%",
       `{${c.class}:{${c.field}:{_${c.operator}: ${getParamValue(
-        c
+        c.value
       )}}%CLAUSE_OBJECT%}}`
     );
   });
@@ -125,7 +145,15 @@ export const prepareClauseObject = (name, config) => {
   return res;
 };
 
-export const getParamValue = (param) => {
+const getParamValue = (val) => {
+  if (typeof val === "string") {
+    return ` "${val}"`;
+  } else {
+    return val;
+  }
+};
+
+export const getParamValueEx = (param) => {
   if (param && param.type) {
     if (param.value === undefined) {
       return null;
