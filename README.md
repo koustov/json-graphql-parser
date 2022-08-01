@@ -25,6 +25,7 @@
 - [Install](#install)
 - [Usage](#usage)
 - [Query Configuration](#query-configuration)
+- [Schema](#schema)
 - [Examples](#examples)
 - [Contribution 🍰](#contribution-)
 - [License](#license)
@@ -90,6 +91,9 @@ Clause
     },
 }
 ```
+
+## Schema
+Check the [object schema here](./templates/base-template_schema.js)
 
 ## Examples 
 A bunch of examples has been given under [queries](./example/queries_v2/) from an outstanding open source application called [reactplay](https://www.reactplay.io)

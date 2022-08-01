@@ -1,5 +1,7 @@
 import axios from "axios";
 import { prepareQuery } from "../templates/base-template.js";
+import { Validator } from "jsonschema";
+import { schema } from "../templates/base-template_schema.js";
 
 const BACKEND_URL = `${process.env.REACT_APP_NHOST_BACKEND_URL}/${process.env.REACT_APP_NHOST_VERSION}/${process.env.REACT_APP_NHOST_ENDPOINT}`;
 const header = {
@@ -78,6 +80,20 @@ export const submit_multi = (requests, url, reqheder) => {
     promises.push(submit(config, url, reqheder));
   });
   return Promise.all(promises);
+};
+
+/**
+ * Validate if the input object satisfies the schema
+ * @param {object} conf_object           Mandatory.
+ * @returns {Boolean} Returns "true", if the object is valid, else it returns "false"
+ */
+export const validate_object = (conf_object) => {
+  var v = new Validator();
+  const validationResult = v.validate(conf_object, schema);
+  return {
+    result: validationResult.errors.length === 0,
+    error: validationResult.errors,
+  };
 };
 
 function postData(url, config, reqheaders, print_query) {

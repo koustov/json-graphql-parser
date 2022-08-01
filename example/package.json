@@ -20,10 +20,6 @@
   "homepage": "https://github.com/koustov/json-graphql-server#readme",
   "dependencies": {
     "axios": "^0.27.2",
-    "dotenv": "^16.0.1",
-    "json-graphql-server": "link:.."
-  },
-  "runtimeArgs": [
-    "--preserve-symlinks"
-  ]
+    "dotenv": "^16.0.1"
+  }
 }
