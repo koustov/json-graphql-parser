@@ -19,18 +19,21 @@
 
 ![GitHub watchers](https://img.shields.io/github/watchers/koustov/json-graphql-parser.svg?logo=github&label=Watch) ![GitHub watchers](https://img.shields.io/github/issues/koustov/json-graphql-parser?logo=github&label=Issues) ![GitHub watchers](https://img.shields.io/github/stars/koustov/json-graphql-parser?logo=github&label=Stars) ![GitHub watchers](https://img.shields.io/npm/dt/json-graphql-parser.svg?logo=npm&label=downloads)
 
-This is a **fully customizable** form builder based on [`React`](https://facebook.github.io/react/)
-
 **Table of Contents**
 
+- [Playground](#playground)
 - [Install](#install)
 - [Usage](#usage)
 - [Query Configuration](#query-configuration)
+- [Schema](#schema)
 - [Examples](#examples)
 - [Contribution 🍰](#contribution-)
 - [License](#license)
 
+**Note** V1 template will be deprecated soon. Use V2 instead.
 
+## Playground
+Visit https://jgpp.koustov.com/
 ## Install 
 
 ```bash
@@ -64,7 +67,7 @@ Basic Query
     name:       "[Optional | String]: Query name",
     function:   "[Required | String]: Target function name",
     write:      "[Optional | Boolean]: Whether the current one is a write query",
-    params:     "[Required | String Array]: Array parameters to return"
+    return:     "[Required | String Array]: Array parameters to return"
 }
 ```
 
@@ -73,23 +76,27 @@ Clause
 ```javascript
 {
     where: {
-        class:      "[Optional | String] Target class name",
-        node:       "[Required | String] Target node",
-        operator:   "[Optional | String] Operator type (or/and)",
-        clause: [{
-            field:      "[Required | String]: Field in question",
-            operator:   "[Required | String] Operator (eq | ne | in | ...)",
-            value:      "[Required | String] Value to match",
-            type:       "[Optional | String] Value type",
+        clause {
             class:      "[Optional | String] Target class name",
             node:       "[Required | String] Target node",
-        }],
+            operator:   "[Optional | String] Operator type (or/and)",
+            conditions: [{
+                field:      "[Required | String]: Field in question",
+                operator:   "[Required | String] Operator (eq | ne | in | ...)",
+                value:      "[Required | String] Value to match",
+                class:      "[Optional | String] Target class name",
+                clause:     "[Optional | Object] More recursive conditions"
+            }],
+        }
     },
 }
 ```
 
+## Schema
+Check the [object schema here](./templates/base-template_schema.js)
+
 ## Examples 
-A bunch of examples has been given under [queries](./example/queries/) from an outstanding open source  application called [reactplay](https://www.reactplay.io)
+A bunch of examples has been given under [queries](./example/queries_v2/) from an outstanding open source application called [reactplay](https://www.reactplay.io)
 
 ## Contribution 🍰
 

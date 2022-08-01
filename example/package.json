@@ -17,7 +17,7 @@
     "url": "https://github.com/koustov/json-graphql-server/issues"
   },
   "type": "module",
-  "homepage": "https://github.com/koustov/json-graphql-serveri#readme",
+  "homepage": "https://github.com/koustov/json-graphql-server#readme",
   "dependencies": {
     "axios": "^0.27.2",
     "dotenv": "^16.0.1"

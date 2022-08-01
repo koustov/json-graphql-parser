@@ -14,6 +14,7 @@ const header = {
  * @param {object}           reqheder Optional.
  */
 export const submit_multi = (requests, url, reqheder) => {
+  console.warn("V1 will be deprecatred soon. V2 instead.");
   const promises = [];
   let updatedHeader = header.headers;
   if (reqheder) {
@@ -33,11 +34,15 @@ export const submit_multi = (requests, url, reqheder) => {
  * @param {object}           reqheder Optional.
  * @returns {Promise} single promise
  */
-export const submit = (request, url, reqheder) => {
+export const submit = (request, url, reqheder, print_query = false) => {
+  console.warn("V1 will be deprecatred soon. V2 instead.");
   let updatedHeader = header.headers;
   if (reqheder) {
     updatedHeader = { ...updatedHeader, ...reqheder };
     header.headers = updatedHeader;
+  }
+  if (print_query) {
+    console.log(`Request: ${request}`);
   }
   return postData(url, request, updatedHeader)
     .then((res) => {
@@ -103,28 +108,27 @@ function postData(url, config, reqheaders) {
 export const config_to_query = (config) => {
   let res = "";
   if (config.write) {
-    if (config.custom) {
-      res = `
-           mutation
-           ${config.method}${getCustomParametersFormatted(
-        "$",
-        config.param,
-        ""
-      )}{
-            ${config.method}${getCustomParametersFormatted(
-        "",
-        config.param,
-        "$"
-      )}
-           }`;
+    const single_query_template = `mutation %MUTATION_LABEL% {%MUTATION_FUNCTION%(object: {%MUTATION_OBJECT%}) {id}}`;
+    const multiple_query_template = `mutation %MUTATION_LABEL% {
+      %MUTATION_FUNCTION%(objects: [%MUTATION_OBJECTS%]) {
+        id
+      }
+    }`;
+    let res = config.multiple ? multiple_query_template : single_query_template;
+    res = res.replace("%MUTATION_LABEL%", config.name);
+    res = res.replace("%MUTATION_FUNCTION%", config.function);
+    if (config.multiple) {
+      // TODO: Imeplement multiple oject insert
     } else {
-      res = `
-        mutation {
-      ${config.function}${getParametersFormatted(config.param)}
-        ${getBodyFormatted(config.body)}    
-        }
-    `;
+      const object_parsed = [];
+      if (config.object) {
+        Object.keys(config.object).forEach((key) => {
+          object_parsed.push(`${key}:"${config.object[key]}"`);
+        });
+        res = res.replace("%MUTATION_OBJECT%", object_parsed.join(","));
+      }
     }
+    return res;
   } else {
     res = `
     query ${config.name}{

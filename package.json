@@ -1,6 +1,6 @@
 {
   "name": "json-graphql-parser",
-  "version": "0.0.9",
+  "version": "0.1.3",
   "description": "Most convenient way to create graphql queries from simple JSON object",
   "author": "Koustov <koustov@live.com> (https://tweeter.com/koustov)",
   "license": "MIT",
@@ -8,11 +8,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "type":"module",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/koustov/json-graphql-parser/issues"
   },
-  "homepage": "https://github.com/koustov/json-graphql-parser#readme",
+  "homepage": "https://jgpp.koustov.com/",
   "repository": {
     "type": "git",
     "url": "https://github.com/koustov/json-graphql-parser.git"
@@ -27,5 +27,9 @@
     "graphql-parser",
     "graphql-query",
     "json-to-query"
-    ]
+  ],
+  "dependencies": {
+    "axios": "^0.27.2",
+    "jsonschema": "^1.4.1"
+  }
 }
