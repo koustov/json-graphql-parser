@@ -50,7 +50,7 @@ export const schema = {
                       type: "string",
                     },
                     value: {
-                      type: "string",
+                      type: ["number", "string", "boolean"],
                     },
                   },
                   required: ["field", "operator", "value"],
