@@ -98,11 +98,17 @@ export const prepareClause = (where_clause) => {
       if (clause.conditions && clause.conditions.length) {
         if (clause.conditions.length > 1) {
           clause.conditions.forEach((con) => {
-            current_obj.push({
+            let temp = {
               [`'${con.field}'`]: {
                 [`'_${con.operator}'`]: `'${getParamValue(con.value)}'`,
               },
-            });
+            };
+            if (con.class) {
+              temp = {
+                [`'${con.class}'`]: { ...temp },
+              };
+            }
+            current_obj.push(temp);
             if (con.clause) {
               con = { ...con, ...processClauseObject(con) };
             }
