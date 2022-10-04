@@ -115,9 +115,17 @@ export const prepareClause = (where_clause) => {
           });
         } else {
           clause.conditions.forEach((con) => {
-            current_obj[`'${con.field}'`] = {
-              [`'_${con.operator}'`]: `'${getParamValue(con.value)}'`,
-            };
+            if (con.class) {
+              current_obj[`'${con.class}'`] = {
+                [`'${con.field}'`]: {
+                  [`'_${con.operator}'`]: `'${getParamValue(con.value)}'`,
+                },
+              };
+            } else {
+              current_obj[`'${con.field}'`] = {
+                [`'_${con.operator}'`]: `'${getParamValue(con.value)}'`,
+              };
+            }
             if (con.clause) {
               con = { ...con, ...processClauseObject(con) };
             }
