@@ -8,8 +8,25 @@ import { FetchPlaysSimple } from "./queries_v2/fetch-plays.js";
 import { AddATag, AddALike } from "./queries_v2/insert.js";
 import { UpdateATag } from "./queries_v2/update.js";
 import { DeleteATag } from "./queries_v2/delete.js";
+import { filterWithTags } from "./queries_v2/fetch-plays-with-tags.js";
+import {
+  oneTag,
+  oneLevelOneTag,
+  oneLevelTwoTags,
+  oneLevelOneCreator,
+  twoTags,
+  fetchPlaysWithMultipleFilter,
+  fetchPlaysWithMultipleFilter1,
+} from "./queries_v2/multiple-filters.js";
+dotenv.config({
+  path: ".env",
+});
 
-dotenv.config({ path: ".env" });
+console.log(validate_object(fetchFilterData.getAllTags));
+
+// submit(oneLevelOneCreator, API_URL)
+//   .then((response) => console.log(response))
+//   .catch((error) => console.error(error));
 
 // const url = process.env.API_SERVER;
 // // ####################### FETCH QUERIES ##############################
@@ -106,5 +123,3 @@ dotenv.config({ path: ".env" });
 //     console.log(`Result (UpdateATag): Total rows retrieved ${res.length}`)
 //   )
 //   .catch((e) => console.error(`ERROR: (UpdateATag) ${e}`));
-
-console.log(validate_object(fetchFilterData.getAllTags));
