@@ -52,6 +52,9 @@ export const schema = {
                     value: {
                       type: ["number", "string", "boolean"],
                     },
+                    class: {
+                      type: "string",
+                    },
                   },
                   required: ["field", "operator", "value"],
                 },

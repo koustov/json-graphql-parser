@@ -79,7 +79,7 @@ export const processObjects = (template, config) => {
 export const prepareClause = (where_clause) => {
   const processClauseObject = (where) => {
     let res_obj = {};
-    // openign brace
+    // opening brace
     let current_obj = res_obj;
     const clause = where.clause;
     if (clause) {
@@ -90,30 +90,43 @@ export const prepareClause = (where_clause) => {
         current_obj = current_obj[operaton_string];
       }
 
-      if (clause.class) {
-        current_obj[clause.class] = {};
-        current_obj = current_obj[clause.class];
-      }
-
       if (clause.conditions && clause.conditions.length) {
         if (clause.conditions.length > 1) {
           clause.conditions.forEach((con) => {
-            current_obj.push({
-              [`'${con.field}'`]: {
-                [`'_${con.operator}'`]: `'${getParamValue(con.value)}'`,
-              },
-            });
             if (con.clause) {
-              con = { ...con, ...processClauseObject(con) };
+              con = { ...processClauseObject(con) };
+              current_obj.push(con);
+            } else {
+              let temp = {
+                [`'${con.field}'`]: {
+                  [`'_${con.operator}'`]: `'${getParamValue(con.value)}'`,
+                },
+              };
+              const className = con.class || clause.class;
+              if (className) {
+                temp = {
+                  [`'${className}'`]: { ...temp },
+                };
+              }
+              current_obj.push(temp);
             }
           });
         } else {
           clause.conditions.forEach((con) => {
-            current_obj[`'${con.field}'`] = {
-              [`'_${con.operator}'`]: `'${getParamValue(con.value)}'`,
-            };
             if (con.clause) {
-              con = { ...con, ...processClauseObject(con) };
+              con = { ...processClauseObject(con) };
+              const operaton_string = `'_${clause.operator}'`;
+              res_obj[operaton_string] = con;
+            } else if (con.class) {
+              current_obj[`'${con.class}'`] = {
+                [`'${con.field}'`]: {
+                  [`'_${con.operator}'`]: `'${getParamValue(con.value)}'`,
+                },
+              };
+            } else {
+              current_obj[`'${con.field}'`] = {
+                [`'_${con.operator}'`]: `'${getParamValue(con.value)}'`,
+              };
             }
           });
         }
