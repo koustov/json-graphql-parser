@@ -1,125 +1,36 @@
 import { submit, validate_object } from "../v2/index.js";
 import dotenv from "dotenv";
-import { fetchFilterData } from "./queries_v2/fetch-filter-data.js";
-import { FetchPlaysFilter } from "./queries_v2/fetch-plays-filter.js";
-import { FetchPlaysPaginated } from "./queries_v2/fetch-plays-paginated.js";
-import { FetchPlaysSorted } from "./queries_v2/fetch-plays-sorted.js";
-import { FetchPlaysSimple } from "./queries_v2/fetch-plays.js";
-import { AddATag, AddALike } from "./queries_v2/insert.js";
-import { UpdateATag } from "./queries_v2/update.js";
-import { DeleteATag } from "./queries_v2/delete.js";
-import { filterWithTags } from "./queries_v2/fetch-plays-with-tags.js";
-import {
-  oneTag,
-  oneLevelOneTag,
-  oneLevelTwoTags,
-  oneLevelOneCreator,
-  twoTags,
-  fetchPlaysWithMultipleFilter,
-  fetchPlaysWithMultipleFilter1,
-} from "./queries_v2/multiple-filters.js";
-dotenv.config({
-  path: ".env",
-});
+dotenv.config({ path: ".env" });
 
-console.log(validate_object(fetchFilterData.getAllTags));
+import { getQueryObject } from "./_test_data.js";
 
-// submit(oneLevelOneCreator, API_URL)
-//   .then((response) => console.log(response))
-//   .catch((error) => console.error(error));
+const url = process.env.API_SERVER;
 
-// const url = process.env.API_SERVER;
-// // ####################### FETCH QUERIES ##############################
+const execute = async (query_object) => {
+  console.log(`Validating object: ${query_object.query.display}`);
+  console.log(validate_object(query_object.query));
+  const res = await submit(query_object.query, url, undefined, false);
 
-// console.log("Query Processing Starts");
+  if (query_object.post_process) {
+    console.log(
+      `>>> Result >>> ${
+        query_object.query.display
+      } :  ${query_object.post_process(res)}`
+    );
+  } else {
+    console.log(`>>> Result >>> ${query_object.query.display} :  ${res}`);
+  }
+};
 
-// submit(fetchFilterData.getAllTags, url, undefined, true)
-//   .then((res) =>
-//     console.log(`Result (getAllTags): Total rows retrieved ${res.length}`)
-//   )
-//   .catch((e) => console.error(`ERROR: (getAllTags) ${e}`));
+const main = async () => {
+  const query_objects = getQueryObject();
+  query_objects.forEach(async (qo, index) => {
+    console.log(
+      `-------------------- Executing ${index + 1} of ${query_objects.length}`
+    );
 
-// submit(fetchFilterData.getAllLevels, url, undefined, true)
-//   .then((res) =>
-//     console.log(`Result (getAllLevels): Total rows retrieved ${res.length}`)
-//   )
-//   .catch((e) => console.error(`ERROR: (getAllLevels) ${e}`));
+    await execute(qo);
+  });
+};
 
-// submit(fetchFilterData.getAllUsers, url, undefined, true)
-//   .then((res) =>
-//     console.log(`Result (getAllUsers): Total rows retrieved ${res.length}`)
-//   )
-//   .catch((e) => console.error(`ERROR: (getAllUsers) ${e}`));
-
-// console.log("fetch-plays-filter -------------------");
-
-// submit(FetchPlaysFilter.getAllFeaturedPlays(), url, undefined, true)
-//   .then((res) =>
-//     console.log(
-//       `Result (getAllFeaturedPlays): Total rows retrieved ${res.length}`
-//     )
-//   )
-//   .catch((e) => console.error(`ERROR: (getAllFeaturedPlays) ${e}`));
-
-// submit(
-//   FetchPlaysFilter.filterPlaysBySearchString({ name: "why" }),
-//   url,
-//   undefined,
-//   true
-// )
-//   .then((res) =>
-//     console.log(
-//       `Result (filterPlaysBySearchString): Total rows retrieved ${res.length}`
-//     )
-//   )
-//   .catch((e) => console.error(`ERROR: (filterPlaysBySearchString) ${e}`));
-
-// // console.log("-------------------------------");
-
-// submit(FetchPlaysPaginated, url, undefined, true)
-//   .then((res) =>
-//     console.log(
-//       `Result (FetchPlaysPaginated): Total rows retrieved ${res.length}`
-//     )
-//   )
-//   .catch((e) => console.error(`ERROR: (FetchPlaysPaginated) ${e}`));
-
-// submit(FetchPlaysSorted, url, undefined, true)
-//   .then((res) =>
-//     console.log(`Result (FetchPlaysSorted): Total rows retrieved ${res.length}`)
-//   )
-//   .catch((e) => console.error(`ERROR: (FetchPlaysSorted) ${e}`));
-
-// submit(FetchPlaysSimple, url, undefined, true)
-//   .then((res) =>
-//     console.log(`Result (FetchPlaysSimple): Total rows retrieved ${res.length}`)
-//   )
-//   .catch((e) => console.error(`ERROR: (FetchPlaysSimple) ${e}`));
-
-// ####################### DELETE QUERIES ##############################
-// submit(DeleteATag, url, undefined, true)
-//   .then((res) =>
-//     console.log(`Result (DeleteATag): Total rows retrieved ${res.length}`)
-//   )
-//   .catch((e) => console.error(`ERROR: (DeleteATag) ${e}`));
-// ####################### INSERT QUERIES ##############################
-
-// submit(AddATag, url, undefined, true)
-//   .then((res) =>
-//     console.log(`Result (AddATag): Total rows retrieved ${res.length}`)
-//   )
-//   .catch((e) => console.error(`ERROR: (FetchPlaysSimple) ${e}`));
-
-// // NOT WORKING
-// submit(AddALike, url, undefined, true)
-//   .then((res) =>
-//     console.log(`Result (AddALike): Total rows retrieved ${res.length}`)
-//   )
-//   .catch((e) => console.error(`ERROR: (AddALike) ${e}`));
-
-// ####################### UPDATE QUERIES ##############################
-// submit(UpdateATag, url, undefined, true)
-//   .then((res) =>
-//     console.log(`Result (UpdateATag): Total rows retrieved ${res.length}`)
-//   )
-//   .catch((e) => console.error(`ERROR: (UpdateATag) ${e}`));
+await main();
