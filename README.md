@@ -33,40 +33,45 @@
 **Note** V1 template will be deprecated soon. Use V2 instead.
 
 ## Playground
+
 Visit https://jgpp.koustov.com/
-## Install 
+
+## Install
 
 ```bash
     npm install json-graphql-parser axios
     # or
     yarn add json-graphql-parser axios
 ```
+
 ## Usage
 
 1. Import
-    ES6
-    ```javascript
-    // ES6
-    import {submit} from 'json-graphql-parser'
-    
-    // ES5
-    const {submit} = require('json-graphql-parser')
-    ```
+   ES6
+
+   ```javascript
+   // ES6
+   import { submit } from "json-graphql-parser";
+
+   // ES5
+   const { submit } = require("json-graphql-parser");
+   ```
+
 2. Usage
    ```javascript
-   submit(query_config, url, additional_header)
+   submit(query_config, url, additional_header);
    ```
 
 ## Query Configuration
-    
+
 Basic Query
 
 ```javascript
 {
     display:    "[Optional | String]: Give a display name for the query",
     name:       "[Optional | String]: Query name",
-    function:   "[Required | String]: Target function name",
-    write:      "[Optional | Boolean]: Whether the current one is a write query",
+    function:   "[Optional | String]: Target function name",
+    write:      "[Optional | Boolean]: Whether it is a graphql query or mutation that you want to perform",
     return:     "[Required | String Array]: Array parameters to return"
 }
 ```
@@ -78,12 +83,11 @@ Clause
     where: {
         clause {
             class:      "[Optional | String] Target class name",
-            node:       "[Required | String] Target node",
             operator:   "[Optional | String] Operator type (or/and)",
             conditions: [{
-                field:      "[Required | String]: Field in question",
-                operator:   "[Required | String] Operator (eq | ne | in | ...)",
-                value:      "[Required | String] Value to match",
+                field:      "[Optional | String]: Field in question",
+                operator:   "[Optional | String] Operator (eq | ne | in | ...)",
+                value:      "[Optional | String] Value to match",
                 class:      "[Optional | String] Target class name",
                 clause:     "[Optional | Object] More recursive conditions"
             }],
@@ -92,10 +96,14 @@ Clause
 }
 ```
 
+> Note: In `conditions`, you could **either** use `field`, `operator` and `value` properties **or** you can nest one level down using `clause`
+
 ## Schema
+
 Check the [object schema here](./templates/base-template_schema.js)
 
-## Examples 
+## Examples
+
 A bunch of examples has been given under [queries](./example/queries_v2/) from an outstanding open source application called [reactplay](https://www.reactplay.io)
 
 ## Contribution 🍰
