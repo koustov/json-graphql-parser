@@ -37,9 +37,9 @@ Visit https://jgpp.koustov.com/
 ## Install 
 
 ```bash
-    npm install json-graphql-parser axios
+    npm install json-graphql-parser axios url
     # or
-    yarn add json-graphql-parser axios
+    yarn add json-graphql-parser axios url
 ```
 ## Usage
 
