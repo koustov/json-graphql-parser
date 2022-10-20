@@ -1,7 +1,7 @@
 ## Contributing
 
-[fork]: /fork
-[pr]: /compare
+[fork]: ../../fork
+[pr]: ../../compare
 [style]: https://standardjs.com/
 [code-of-conduct]: CODE_OF_CONDUCT.md
 
@@ -19,9 +19,8 @@ We'd also love PRs. If you're thinking of a large PR, we advise opening up an is
 
 1. [Fork][fork] and clone the repository.
 1. Configure and install the dependencies: `npm install`.
-1. Make sure the tests pass on your machine: `npm test`, note: these tests also apply the linter, so there's no need to lint separately.
 1. Create a new branch: `git checkout -b my-branch-name`.
-1. Make your change, add tests, and make sure the tests still pass.
+1. Make your change and test them to ensure everything is working fine. Also apply the linter, so there's no need to lint separately.
 1. Push to your fork and [submit a pull request][pr].
 1. Pat your self on the back and wait for your pull request to be reviewed and merged.
 
