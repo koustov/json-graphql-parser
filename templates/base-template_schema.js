@@ -55,8 +55,33 @@ export const schema = {
                     class: {
                       type: "string",
                     },
+                    clause: { type: "object" },
                   },
-                  required: ["field", "operator", "value"],
+                  if: { properties: { field: { type: "string" } } },
+                  then: { dependentRequired: { field: ["operator", "value"] } },
+                  else: {
+                    properties: {
+                      clause: {
+                        type: "object",
+                        additionalProperties: false,
+                        properties: {
+                          operator: {
+                            type: "string",
+                          },
+                          class: {
+                            type: "string",
+                          },
+                          conditions: {
+                            type: "array",
+                            minContains: 1,
+                            items: [{ type: "object" }],
+                          },
+                        },
+                        required: ["conditions"],
+                      },
+                    },
+                    required: ["clause"],
+                  },
                 },
               ],
             },

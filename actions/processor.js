@@ -102,8 +102,14 @@ export const prepareClause = (where_clause) => {
                   [`'_${con.operator}'`]: `'${getParamValue(con.value)}'`,
                 },
               };
-              const className = con.class || clause.class;
-              if (className) {
+              if (con.class && clause.class) {
+                temp = {
+                  [`${clause.class}`]: {
+                    [`${con.class}`]: { ...temp },
+                  },
+                };
+              } else if (con.class || clause.class) {
+                const className = con.class || clause.class;
                 temp = {
                   [`'${className}'`]: { ...temp },
                 };
@@ -117,8 +123,17 @@ export const prepareClause = (where_clause) => {
               con = { ...processClauseObject(con) };
               const operaton_string = `'_${clause.operator}'`;
               res_obj[operaton_string] = con;
-            } else if (con.class) {
-              current_obj[`'${con.class}'`] = {
+            } else if (clause.class && con.class) {
+              current_obj[`'${clause.class}'`] = {
+                [`${con.class}`]: {
+                  [`'${con.field}'`]: {
+                    [`'_${con.operator}'`]: `'${getParamValue(con.value)}'`,
+                  },
+                },
+              };
+            } else if (con.class || clause.class) {
+              const className = con.class || clause.class;
+              current_obj[`'${className}'`] = {
                 [`'${con.field}'`]: {
                   [`'_${con.operator}'`]: `'${getParamValue(con.value)}'`,
                 },

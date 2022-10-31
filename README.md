@@ -1,12 +1,12 @@
 <div align="center">
    <p>
     <h1>json-graphql-parser</h1>
-    <h4>A simple way to create and parse graphql query on node application</h1>
+    <h4>A simple way to create and parse GraphQL query on node application</h1>
   </p>
   <p>
-     <i>Building graphql query is just an API away.</i>
+     <i>Building GraphQL query is just an API away.</i>
      <br/>
-     <i>No graphql knowledge is required.</i>
+     <i>No GraphQL knowledge is required.</i>
      <br/>
   </p>
 
@@ -33,40 +33,45 @@
 **Note** V1 template will be deprecated soon. Use V2 instead.
 
 ## Playground
+
 Visit https://jgpp.koustov.com/
-## Install 
+
+## Install
 
 ```bash
     npm install json-graphql-parser axios url
     # or
     yarn add json-graphql-parser axios url
 ```
+
 ## Usage
 
 1. Import
-    ES6
-    ```javascript
-    // ES6
-    import {submit} from 'json-graphql-parser'
-    
-    // ES5
-    const {submit} = require('json-graphql-parser')
-    ```
+   ES6
+
+   ```javascript
+   // ES6
+   import { submit } from "json-graphql-parser";
+
+   // ES5
+   const { submit } = require("json-graphql-parser");
+   ```
+
 2. Usage
    ```javascript
-   submit(query_config, url, additional_header)
+   submit(query_config, url, additional_header);
    ```
 
 ## Query Configuration
-    
+
 Basic Query
 
 ```javascript
 {
     display:    "[Optional | String]: Give a display name for the query",
     name:       "[Optional | String]: Query name",
-    function:   "[Required | String]: Target function name",
-    write:      "[Optional | Boolean]: Whether the current one is a write query",
+    function:   "[Optional | String]: Target function name",
+    write:      "[Optional | Boolean]: Whether it is a GraphQL query or mutation that you want to perform",
     return:     "[Required | String Array]: Array parameters to return"
 }
 ```
@@ -78,12 +83,11 @@ Clause
     where: {
         clause {
             class:      "[Optional | String] Target class name",
-            node:       "[Required | String] Target node",
             operator:   "[Optional | String] Operator type (or/and)",
             conditions: [{
-                field:      "[Required | String]: Field in question",
-                operator:   "[Required | String] Operator (eq | ne | in | ...)",
-                value:      "[Required | String] Value to match",
+                field:      "[Optional | String]: Field in question",
+                operator:   "[Optional | String] Operator (eq | ne | in | ...)",
+                value:      "[Optional | String] Value to match",
                 class:      "[Optional | String] Target class name",
                 clause:     "[Optional | Object] More recursive conditions"
             }],
@@ -92,19 +96,23 @@ Clause
 }
 ```
 
+> Note: In `conditions`, you could **either** use `field`, `operator` and `value` properties **or** you can nest one level down using `clause`
+
 ## Schema
+
 Check the [object schema here](./templates/base-template_schema.js)
 
-## Examples 
-A bunch of examples has been given under [queries](./example/queries_v2/) from an outstanding open source application called [reactplay](https://www.reactplay.io)
+## Examples
+
+A bunch of examples have been given under [queries](./example/queries_v2/) from an outstanding open-source application called [Reactplay](https://www.reactplay.io)
 
 ## Contribution 🍰
 
-Feel free to create issue and make pull request
+Feel free to create [issue](../../issues) and make [pull request](../../pulls)
 
-Refer [code of conduct ](./CODE_OF_CONDUCT.md)
+Refer [Code of Conduct](./CODE_OF_CONDUCT.md)
 
-Refer [contributing ](./CONTRIBUTING.md)
+Refer [Contributing](./CONTRIBUTING.md)
 
 ## License
 
