@@ -4,7 +4,7 @@ import { Validator } from "jsonschema";
 import { schema } from "../templates/base-template_schema.js";
 
 const BACKEND_URL = process.env?.REACT_APP_NHOST_BACKEND_URL 
-	? `${process.env.REACT_APP_NHOST_BACKEND_URL}/${process.env.REACT_APP_NHOST_VERSION}/${process.env.REACT_APP_NHOST_ENDPOINT}`;
+	? `${process.env.REACT_APP_NHOST_BACKEND_URL}/${process.env.REACT_APP_NHOST_VERSION}/${process.env.REACT_APP_NHOST_ENDPOINT}`
 	: `${process.env.VITE_NHOST_BACKEND_URL}/${process.env.VITE_NHOST_VERSION}/${process.env.VITE_NHOST_ENDPOINT}`;
 
 const header = {
