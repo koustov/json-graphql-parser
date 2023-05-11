@@ -306,12 +306,14 @@ Below are the major parameters in a json-graphql-parser object
     - *Definition*: Add a user John Doe to collection
     - *Structuring*: 
         - display: "Insert user"
+        - write: true
         - function: "insert_users_one"
         - return: ["affected_rows"]
     - *Final object*:
         ```javascript
         display: 'Insert user',
         name: 'Insert user',
+        write: true,
         function: 'insert_users_one',
         object: {
             name: 'Jhn Doe',
@@ -328,6 +330,7 @@ Below are the major parameters in a json-graphql-parser object
     - *Structuring*: 
         - display: "Update user"
         - function: "update_users"
+        - write: true
         - where: {'name': 'John Doe}
         - value: {'country': 'india'}
         - return: ["affected_rows"]
@@ -336,6 +339,7 @@ Below are the major parameters in a json-graphql-parser object
         display: 'Insert user',
         name: 'Insert user',
         function: 'insert_users_one',
+        write: true,
         value: {
             country: 'india'
         }
