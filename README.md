@@ -21,22 +21,69 @@
 
 **Table of Contents**
 
+- [What is?](#what-is)
 - [Playground](#playground)
 - [Install](#install)
 - [Usage](#usage)
 - [Query Configuration](#query-configuration)
+  - [Parameters](#parameters)
+  - [Query Constrinction](#query-constrinction)
+- [More Examples](#more-examples)
 - [Schema](#schema)
-- [Examples](#examples)
+- [What next](#what-next)
 - [Contribution 🍰](#contribution-)
 - [License](#license)
 
 **Note** V1 template will be deprecated soon. Use V2 instead.
 
-## Playground
+# What is?
+
+`json-graphql-parser` is a modular and simpler way to write graph ql query from any node/javascript application. User doesn't have to know the complex structure of a graphql schema, rather its being driven by objects. 
+
+**Quick example**:
+
+*graphql syntax*
+```gql
+query MyQuery {
+  users(limit: 5, offset: 5, where: {_and: {id: {_eq: "123"}}}, order_by: {created_at: asc}) {
+    id
+    name
+    user_like {
+      id
+      liked
+    }
+    description
+  }
+}
+
+```
+
+*json-graphql-parser syntax*
+```javascript
+    display: 'fetch users',
+    name: 'Fetch_Users',
+    function: 'users',
+    return: [
+        "id",
+        "name", 
+        { 
+            "play_like": [
+                "liked", 
+                "id"
+            ] 
+        }, 
+    "description"
+    ],
+    orderBy: {
+        "created_at": "desc"
+    }
+```
+
+# Playground
 
 Visit https://jgpp.koustov.com/
 
-## Install
+# Install
 
 ```bash
     npm install json-graphql-parser axios url
@@ -44,17 +91,16 @@ Visit https://jgpp.koustov.com/
     yarn add json-graphql-parser axios url
 ```
 
-## Usage
+# Usage
 
 1. Import
    ES6
 
    ```javascript
    // ES6
-   import { submit } from "json-graphql-parser";
-
+    import { submit, submit_multi } from 'json-graphql-parser/v2/index.js';
    // ES5
-   const { submit } = require("json-graphql-parser");
+   const { submit, submit_multi } = require("json-graphql-parser/v2/index.js");
    ```
 
 2. Usage
@@ -62,51 +108,211 @@ Visit https://jgpp.koustov.com/
    submit(query_config, url, additional_header);
    ```
 
-## Query Configuration
+# Query Configuration
 
-Basic Query
+## Parameters
+Below are the major parameters in a json-graphql-parser object
+1. **display**: *Optional | String* : Give a display name for the query
+2. **name**: *Optional | String* : Query name
+3. **function**: *Optional | String* : Target graphql function name . Typical format of function name is <operation_type:mandatory>_<table:mandatory>_<suffix:optional>. 
 
-```javascript
-{
-    display:    "[Optional | String]: Give a display name for the query",
-    name:       "[Optional | String]: Query name",
-    function:   "[Optional | String]: Target function name",
-    write:      "[Optional | Boolean]: Whether it is a GraphQL query or mutation that you want to perform",
-    return:     "[Required | String Array]: Array parameters to return"
-}
-```
+    Example:
+   1. **table_name**: For fetch
+   2. Update_**table_name**: For update
+   3. Insert_**table_name**_One: For inserting one entry
+   4. Insert_**table_name**_multi: For inserting multiple entries
+4. **return**: *Required | String Array*: Array parameters to return
+5. **write**: *Optional | Boolean* : Denotes if the given request is for a write or read operation. In other word `mutation` 
+6. **where**: *Optional | Object*: Contains an object structure to denote the where clause.
 
-Clause
-
-```javascript
-{
-    where: {
-        clause {
-            class:      "[Optional | String] Target class name",
-            operator:   "[Optional | String] Operator type (or/and)",
-            conditions: [{
-                field:      "[Optional | String]: Field in question",
-                operator:   "[Optional | String] Operator (eq | ne | in | ...)",
-                value:      "[Optional | String] Value to match",
+    Format 
+    ```javascript
+    {
+        where: {
+            clause {
                 class:      "[Optional | String] Target class name",
-                clause:     "[Optional | Object] More recursive conditions"
-            }],
+                operator:   "[Optional | String] Operator type (or/and)",
+                conditions: [{
+                    field:      "[Optional | String]: Field in question",
+                    operator:   "[Optional | String] Operator (eq | ne | in | ilike | <any graphql operator>)",
+                    value:      "[Optional | String] Value to match",
+                    type:       "[Optional | String] Type of the value Required only when one wants to pass string value explicitly,
+                    class:      "[Optional | String] Target class name",
+                    clause:     "[Optional | Object] More recursive conditions"
+                }],
+            }
+        },
+    }
+7. **orderBy**: *Optional | Object* : Inform the server what would be ordering mechanism on returned data
+        Format: {<attribute_name>: <order direction: asc|desc>}
+
+8. **offset**: *Optional | Number*: Offset record number. In other word skip the recird by.
+9. **limit**: *Optional | Number*: Limit the return count. `offset` and `limit` together can form pagination mechanism
+
+## Query Constrinction
+1. Basic Select Query
+    - *Definition*: Get all user ids from users table
+    - *Structuring*: 
+        - display: "Fetch user ids"
+        - function: "Fetch_users"
+        - return: ["id"]
+    - *Final object*:
+        ```javascript
+        display: 'Fetch user ids',
+        name: 'Fetch_users',
+        function: 'users',
+        return: [
+            "id"
+        ]
+        ```
+2.  Basic Select Query with order by 
+    - *Definition*: Get all user ids from users table ordered by date of creation
+    - *Structuring*: 
+        - display: "Fetch user ids"
+        - function: "Fetch_users"
+        - return: ["id"]
+        - orderBy: {created_at: "desc"}
+    - *Final object*:
+        ```javascript
+        display: 'Fetch user ids',
+        name: 'Fetch_users',
+        function: 'users',
+        return: [
+            "id"
+        ],
+        orderBy: {
+            "created_at": "desc"
         }
-    },
-}
-```
+        ```
+
+3. Basic Select Query with order by and clause 
+    - *Definition*: Get all user ids from users table where the user belongs to india and ordered by date of creation
+    - *Structuring*: 
+        - display: "Fetch user ids"
+        - function: "Fetch_users"
+        - return: ["id"]
+        - orderBy: {created_at: "desc"}
+        - where:          
+            ```javascript
+            {
+                clause:{
+                operator: 'and',
+                    conditions: [
+                        {
+                            field: 'country',
+                            operator: 'eq',
+                            value: "india",
+                            type: 'string'
+                        }
+                    ]
+                }
+            }
+            ```
+    - *Final object*:
+        ```javascript
+        display: 'Fetch user ids',
+        name: 'Fetch_users',
+        function: 'users',
+        return: [
+            "id"
+        ],
+        orderBy: {
+            "created_at": "desc"
+        },
+        where: {
+            clause:{
+            operator: 'and',
+                conditions: [
+                    {
+                        field: 'country',
+                        operator: 'eq',
+                        value: "india",
+                        type: 'string'
+                    }
+                ]
+            }
+        }
+        ```
+
+4. Basic Select Query with order by and multiple clauses 
+    - *Definition*: Get all user ids from users table where the user belongs to india and department is finance and ordered by date of creation
+    - *Structuring*: 
+        - display: "Fetch user ids"
+        - function: "Fetch_users"
+        - return: ["id"]
+        - orderBy: {created_at: "desc"}
+        - where: 
+            ```javascript
+           {
+                clause:{
+                operator: 'and',
+                    conditions: [
+                        {
+                            field: 'country',
+                            operator: 'eq',
+                            value: "india",
+                            type: 'string'
+                        },
+                        {
+                            field: 'department',
+                            operator: 'eq',
+                            value: "finance",
+                            type: 'string'
+                        }
+                    ]
+                }
+            }
+            ```
+    - *Final object*:
+        ```javascript
+            display: 'Fetch user ids',
+            name: 'Fetch_users',
+            function: 'users',
+            return: [
+                "id"
+            ],
+            orderBy: {
+                "created_at": "desc"
+            },
+            where: {
+                clause:{
+                operator: 'and',
+                    conditions: [
+                        {
+                            field: 'country',
+                            operator: 'eq',
+                            value: "india",
+                            type: 'string'
+                        },
+                        {
+                            field: 'department',
+                            operator: 'eq',
+                            value: "finance",
+                            type: 'string'
+                        }
+                    ]
+                }
+            }
+        ```
 
 > Note: In `conditions`, you could **either** use `field`, `operator` and `value` properties **or** you can nest one level down using `clause`
 
-## Schema
-
-Check the [object schema here](./templates/base-template_schema.js)
-
-## Examples
+# More Examples
 
 A bunch of examples have been given under [queries](./example/queries_v2/) from an outstanding open-source application called [Reactplay](https://www.reactplay.io)
 
-## Contribution 🍰
+# Schema
+
+Check the [object schema here](./templates/base-template_schema.js)
+
+
+# What next
+1. Till date this package is intended to solve the simplistic graphql problems. Now its time to go more complex and generic
+    Issue: (https://github.com/koustov/json-graphql-parser/issues/14)[https://github.com/koustov/json-graphql-parser/issues/14]
+2. grapql to json-graphql-parser object converter
+    Issue; (https://github.com/koustov/json-graphql-parser/issues/15)[https://github.com/koustov/json-graphql-parser/issues/15]
+
+# Contribution 🍰
 
 Feel free to create [issue](../../issues) and make [pull request](../../pulls)
 
@@ -114,6 +320,6 @@ Refer [Code of Conduct](./CODE_OF_CONDUCT.md)
 
 Refer [Contributing](./CONTRIBUTING.md)
 
-## License
+# License
 
 MIT © [Koustov](https://github.com/koustov)
