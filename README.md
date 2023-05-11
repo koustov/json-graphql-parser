@@ -34,8 +34,7 @@
 - [Contribution 🍰](#contribution-)
 - [License](#license)
 
-**Note** V1 template will be deprecated soon. Use V2 instead.
-
+> **Note**:  V1 template will be deprecated soon. Use V2 instead
 # What is?
 
 `json-graphql-parser` is a modular and simpler way to write graph ql query from any node/javascript application. User doesn't have to know the complex structure of a graphql schema, rather its being driven by objects. 
@@ -78,6 +77,9 @@ query MyQuery {
         "created_at": "desc"
     }
 ```
+
+> **Note**:  `json-graphql-parser` was introduced keeping in mind to solve graphql parsing and understanding issue. It never been thought to replace too complex queries which are tough to maitain. If you have very complex queries, break it in multiple simple one. Handling very complex queries are in pipeline (check [What next](#what-next) ) however not scoped or estimated yet
+ 
 
 # Playground
 
