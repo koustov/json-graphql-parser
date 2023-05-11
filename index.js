@@ -267,33 +267,6 @@ function setDateTo(dt, start) {
   return dt;
 }
 
-// const prepareBody = (config) => {
-//   let strRes = config.method;
-//   const parametes = [];
-//   if (config.parameters) {
-//     config.parameters.forEach(function (elem) {
-//       parametes.push(`${elem.name}: "${elem.value}"`);
-//     });
-//     strRes += `(${parametes.join(",")})`;
-//   }
-//   strRes += `{${config.returnParams.join("\n")}}`;
-//   return queryWrapper(strRes);
-// };
-
-// const mutationWrapper = (payload, variables) => {
-//   return JSON.stringify({
-//     query: `${payload}`,
-//     variables: variables instanceof Object ? variables : {},
-//   });
-// };
-
-// const queryWrapper = (payload) => {
-//   return JSON.stringify({
-//     query: `{${payload}}`,
-//     variables: {},
-//   });
-// };
-
 const parseQueryBody = (config) => {
   const body = parseQueryParameterss(config.params);
   const clause = prepareClause(config);

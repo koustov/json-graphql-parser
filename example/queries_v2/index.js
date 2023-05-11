@@ -1,1 +1,1 @@
-export * from './react-play';
+export * from "./react-play";

@@ -6,6 +6,7 @@ import {
 
 export const prepareQuery = (config) => {
   const template = getTempate(config);
+
   let res = "";
   if (template.arguments.length) {
     const argument_list = [];

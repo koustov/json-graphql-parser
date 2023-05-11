@@ -1,6 +1,6 @@
 {
   "name": "json-graphql-parser",
-  "version": "0.1.4",
+  "version": "0.1.9",
   "description": "Most convenient way to create graphql queries from simple JSON object",
   "author": "Koustov <koustov@live.com> (https://tweeter.com/koustov)",
   "license": "MIT",

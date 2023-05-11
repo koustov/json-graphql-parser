@@ -24,6 +24,8 @@
 - [Playground](#playground)
 - [Install](#install)
 - [Usage](#usage)
+  - [Use streamlined object notation](#use-streamlined-object-notation)
+  - [Use graphql query structure](#use-graphql-query-structure)
 - [Query Configuration](#query-configuration)
 - [Schema](#schema)
 - [Examples](#examples)
@@ -43,6 +45,7 @@ Visit https://jgpp.koustov.com/
 ```
 ## Usage
 
+### Use streamlined object notation
 1. Import
     ES6
     ```javascript
@@ -57,8 +60,21 @@ Visit https://jgpp.koustov.com/
    submit(query_config, url, additional_header)
    ```
 
+### Use graphql query structure
 ## Query Configuration
+    1. Import
+    ES6
+    ```javascript
+    // ES6
+    import {submit_gql} from 'json-graphql-parser'
     
+    // ES5
+    const {submit_gql} = require('json-graphql-parser')
+    ```
+2. Usage
+   ```javascript
+   submit_gql(query_string, url, additional_header)
+   ```
 Basic Query
 
 ```javascript

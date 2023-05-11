@@ -83,6 +83,56 @@ export const submit_multi = (requests, url, reqheder) => {
 };
 
 /**
+ * Run GraphQL queries using Axios using raw graphql query
+ * @param {object} request           Mandatory.
+ * @param {string}           url Optional.
+ * @param {object}           reqheder Optional.
+ * @returns {Promise} single promise
+ */
+export const submit_gql = (request, url, reqheder, print_query = false) => {
+  let updatedHeader;
+  if (reqheder) {
+    updatedHeader = { ...updatedHeader, ...reqheder };
+    header.headers = updatedHeader;
+  }
+  if (print_query) {
+    console.log(`Request: ${request}`);
+  }
+  return postData(url, request, updatedHeader, print_query, true)
+    .then((res) => {
+      let data;
+      try {
+        if (res.isAxiosError) {
+          data = { name: "Error" };
+          data.status = res.response.status;
+          data.message = res.message;
+        } else if (!res?.data) {
+          data = { name: "Error" };
+          data.status = 500;
+          data.message = res.message;
+        } else if (res.data.errors && res.data.errors.length) {
+          data = { name: "Error" };
+          data.status = 500;
+          data.message = res.data.errors[0].message;
+          if (request.callback) {
+            data = request.callback(data);
+          }
+        } else {
+          data =
+            res.data[request.function] === undefined
+              ? {}
+              : res.data[request.function];
+        }
+        return data;
+      } catch (err) {}
+    })
+    .catch((error) => {
+      return Promise.reject(error);
+    })
+    .finally(() => {});
+};
+
+/**
  * Validate if the input object satisfies the schema
  * @param {object} conf_object           Mandatory.
  * @returns {Boolean} Returns "true", if the object is valid, else it returns "false"
@@ -96,21 +146,31 @@ export const validate_object = (conf_object) => {
   };
 };
 
-function postData(url, config, reqheaders, print_query) {
-  const processedBody = config_to_query(config);
+function postData(
+  url,
+  config,
+  reqheaders,
+  print_query,
+  ignore_preparaton = false
+) {
+  const processedBody = ignore_preparaton ? config : config_to_query(config);
   if (print_query) {
     console.log(`Request: ${processedBody}`);
   }
   let pbody = {
     query: processedBody,
-    variables:
+  };
+
+  if (!ignore_preparaton) {
+    pbody.variables =
       config.variables && config.variables instanceof Object
         ? config.variables
-        : {},
-  };
+        : {};
+  }
   let options = {
     headers: Object.assign(reqheaders || {}, header.headers),
   };
+  console.log(pbody);
   return axios
     .post(url || BACKEND_URL, JSON.stringify(pbody), options)
     .then((res) => {
