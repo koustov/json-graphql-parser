@@ -125,7 +125,9 @@ Below are the major parameters in a json-graphql-parser object
    4. Insert_**table_name**_multi: For inserting multiple entries
 4. **return**: *Required | String Array*: Array parameters to return
 5. **write**: *Optional | Boolean* : Denotes if the given request is for a write or read operation. In other word `mutation` 
-6. **where**: *Optional | Object*: Contains an object structure to denote the where clause.
+6. **object**: *Optional | Object*: Value of a row when inserting and object
+7. **value**: *Optional | Object*: Keyvalue paired object when its intended to update specific property of a row
+8. **where**: *Optional | Object*: Contains an object structure to denote the where clause.
 
     Format 
     ```javascript
@@ -145,11 +147,11 @@ Below are the major parameters in a json-graphql-parser object
             }
         },
     }
-7. **orderBy**: *Optional | Object* : Inform the server what would be ordering mechanism on returned data
+9. **orderBy**: *Optional | Object* : Inform the server what would be ordering mechanism on returned data
         Format: {<attribute_name>: <order direction: asc|desc>}
 
-8. **offset**: *Optional | Number*: Offset record number. In other word skip the recird by.
-9. **limit**: *Optional | Number*: Limit the return count. `offset` and `limit` together can form pagination mechanism
+10. **offset**: *Optional | Number*: Offset record number. In other word skip the recird by.
+11. **limit**: *Optional | Number*: Limit the return count. `offset` and `limit` together can form pagination mechanism
 
 ## Query Constrinction
 1. Basic Select Query
@@ -297,7 +299,63 @@ Below are the major parameters in a json-graphql-parser object
             }
         ```
 
+
 > Note: In `conditions`, you could **either** use `field`, `operator` and `value` properties **or** you can nest one level down using `clause`
+
+5. Insert Query
+    - *Definition*: Add a user John Doe to collection
+    - *Structuring*: 
+        - display: "Insert user"
+        - function: "insert_users_one"
+        - return: ["affected_rows"]
+    - *Final object*:
+        ```javascript
+        display: 'Insert user',
+        name: 'Insert user',
+        function: 'insert_users_one',
+        object: {
+            name: 'Jhn Doe',
+            department: 'finance',
+            country: 'us'
+        }
+        return: [
+            "affected_rows"
+        ]
+        ```
+
+5. Update Query
+    - *Definition*: Update a user John Doe and set country to india
+    - *Structuring*: 
+        - display: "Update user"
+        - function: "update_users"
+        - where: {'name': 'John Doe}
+        - value: {'country': 'india'}
+        - return: ["affected_rows"]
+    - *Final object*:
+        ```javascript
+        display: 'Insert user',
+        name: 'Insert user',
+        function: 'insert_users_one',
+        value: {
+            country: 'india'
+        }
+        where: {
+            clause:{
+            operator: 'and',
+                conditions: [
+                    {
+                        field: 'name',
+                        operator: 'eq',
+                        value: "John Doe",
+                        type: 'string'
+                    }
+                ]
+            }
+        }
+        return: [
+            "affected_rows"
+        ]
+        ```
 
 # More Examples
 
