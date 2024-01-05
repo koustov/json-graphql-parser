@@ -19,7 +19,7 @@
 	"type": "module",
 	"homepage": "https://github.com/koustov/json-graphql-server#readme",
 	"dependencies": {
-		"axios": "^0.27.2",
+		"axios": "^1.6.4",
 		"dotenv": "^16.0.1"
 	}
 }
